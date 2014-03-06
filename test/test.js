@@ -9,6 +9,11 @@ var rawData = require('./data');
 
 describe('lodash query', function() {
 
+  it('returns the rawData when the predicate is a .', function() {
+    var result = lodashQuery.query('.', rawData);
+    assert.deepEqual(result.value, rawData);
+  });
+
   it('requires a leading .', function() {
     var result = lodashQuery.query('current_item', rawData);
     assert.isNull(result.value);
@@ -17,41 +22,41 @@ describe('lodash query', function() {
   });
 
   it('can walk the object tree', function() {
-    var result = lodashQuery('.workitem', rawData);
+    var result = lodashQuery.query('.workitem', rawData);
     assert.deepEqual(result.value, {
       id: 3434,
       name: 'Item',
       parentId: 3
     });
 
-    result = lodashQuery('.workitem.id', rawData);
+    result = lodashQuery.query('.workitem.id', rawData);
     assert.equal(result.value, 3434);
-    result = lodashQuery('.workitem.name', rawData);
+    result = lodashQuery.query('.workitem.name', rawData);
     assert.equal(result.value, 'Item');
-    result = lodashQuery('.workitem.parent_id', rawData);
+    result = lodashQuery.query('.workitem.parent_id', rawData);
     assert.equal(result.value, 3);
   });
 
   it('can retrieve an item from an array by index', function() {
-    var result = lodashQuery('.items[1]', rawData);
+    var result = lodashQuery.query('.items[1]', rawData);
     assert.deepEqual(result.value, {
       id: 1,
       name: 'Another Item'
     });
 
-    result = lodashQuery('.items[3]', rawData);
+    result = lodashQuery.query('.items[3]', rawData);
     assert.deepEqual(result.value, {
       id: 3,
       name: 'Cat'
     });
 
-    result = lodashQuery('.grouped_stuff.group_a[0]', rawData);
+    result = lodashQuery.query('.grouped_stuff.group_a[0]', rawData);
     assert.deepEqual(result.value, {
       id: 343,
       name: 'Long Cat'
     });
 
-    result = lodashQuery('.grouped_stuff.group_b[2]', rawData);
+    result = lodashQuery.query('.grouped_stuff.group_b[2]', rawData);
     assert.deepEqual(result.value, {
       id: 348,
       name: 'Displeased Cat'
@@ -59,7 +64,7 @@ describe('lodash query', function() {
   });
 
   it('can retrieve an item from an array by predicate', function() {
-    var result = lodashQuery('.items[name="Dog"]', rawData);
+    var result = lodashQuery.query('.items[name="Dog"]', rawData);
     assert.deepEqual(result.value, {
       id: 4,
       name: 'Dog'
@@ -70,7 +75,7 @@ describe('lodash query', function() {
   // on name="Hover Cat".  Something like .grouped_stuff[.[][name="Hover Cat"]];
 
   it('can retrieve multiple values when a predicate matches multple values', function() {
-    var result = lodashQuery('.duplicate_properties[name="not unique"]', rawData);
+    var result = lodashQuery.query('.duplicate_properties[name="not unique"]', rawData);
     assert.isNull(result.key);
     assert.deepEqual(result.value, [
       {
@@ -85,13 +90,13 @@ describe('lodash query', function() {
   });
 
   it('can pluck a value from an array', function() {
-    var result = lodashQuery('.duplicate_properties[name="not unique"].id', rawData);
+    var result = lodashQuery.query('.duplicate_properties[name="not unique"].id', rawData);
     assert.isNull(result.key);
     assert.deepEqual(result.value, [2, 3]);
   });
 
   it('treats objects as arrays', function() {
-    var result = lodashQuery('.[id=3434]', rawData);
+    var result = lodashQuery.query('.[id=3434]', rawData);
     assert.equal(result.key, 'workitem');
     assert.deepEqual(result.value, {
       id: 3434,
