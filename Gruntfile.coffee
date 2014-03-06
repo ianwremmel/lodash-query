@@ -3,18 +3,18 @@ module.exports = (grunt) ->
   require('load-grunt-tasks')(grunt)
 
   grunt.registerTask 'build', [
-    
     'jshint'
-    
+    # TODO browserify
   ]
-  
-  grunt.registerTask 'test', [
-    'build'
-    'mochacli'
-  ]
-  
 
-  grunt.registerTask 'default', ['build']
+  grunt.registerTask 'test', [
+    'jshint'
+    'mochacli'
+    'build'
+  ]
+
+
+  grunt.registerTask 'default', ['test']
 
   grunt.initConfig
     pkg:
@@ -24,7 +24,7 @@ module.exports = (grunt) ->
       src: 'src'
       dist: 'dist'
       test: 'test'
-    
+
     jshint:
       options:
         reporter: require('jshint-stylish')
@@ -32,11 +32,11 @@ module.exports = (grunt) ->
       src: [
           '<%= yeoman.src %>/**/*.js'
         ]
-    
-    
+
+
     mochacli:
       spec:
         dist: '<%= yeoman.test %>/test.js'
         options:
           reporter: 'spec'
-    
+

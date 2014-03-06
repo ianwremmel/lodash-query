@@ -14,13 +14,6 @@ describe('lodash query', function() {
     assert.deepEqual(result.value, rawData);
   });
 
-  it('requires a leading .', function() {
-    var result = lodashQuery.query('current_item', rawData);
-    assert.isNull(result.value);
-    result = lodashQuery.query('current_item', rawData);
-    assert.deepEqual(result.value, 3);
-  });
-
   it('can walk the object tree', function() {
     var result = lodashQuery.query('.workitem', rawData);
     assert.deepEqual(result.value, {
